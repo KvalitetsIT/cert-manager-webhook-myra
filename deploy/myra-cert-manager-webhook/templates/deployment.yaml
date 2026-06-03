@@ -21,7 +21,7 @@ spec:
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ include "myra-cert-manager-webhook.fullname" . }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: true
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -50,20 +50,12 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.myra.apiKeySecretName }}
                   key: api-secret
+            - name: MYRA_API_URL
+              value: {{ .Values.myra.apiUrl | quote }}
           ports:
             - name: https
               containerPort: 443
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              scheme: HTTPS
-              path: /healthz
-              port: https
-          readinessProbe:
-            httpGet:
-              scheme: HTTPS
-              path: /healthz
-              port: https
           volumeMounts:
             - name: certs
               mountPath: /tls
