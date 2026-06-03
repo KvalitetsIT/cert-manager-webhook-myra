@@ -7,8 +7,6 @@ IMAGE_TAG := "latest"
 
 OUT := $(shell pwd)/_out
 
-# FIXME: Required to set the environment variables below. Remove when fixed.
-ENVTEST_K8S_VERSION=1.36.0
 
 HELM_FILES := $(shell find deploy/myra-cert-manager-webhook)
 
@@ -88,5 +86,5 @@ ln -sf "$$(realpath "$(1)-$(3)")" "$(1)"
 endef
 
 define gomodver
-$(shell go list -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' $(1) 2>/dev/null)
+$(shell awk '$$1 == "$(1)" {print $$2; exit}' go.mod)
 endef
