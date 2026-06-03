@@ -4,7 +4,7 @@ go 1.25.9
 
 require (
 	github.com/Myra-Security-GmbH/myrasec-go/v2 v2.51.0
-	github.com/caarlos0/env/v11 v11.4.0
+	github.com/caarlos0/env/v11 v11.4.1
 	github.com/joho/godotenv v1.5.1
 	github.com/miekg/dns v1.1.72
 	github.com/stretchr/testify v1.11.1

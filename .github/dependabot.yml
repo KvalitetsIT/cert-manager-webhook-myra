@@ -4,13 +4,22 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # Wait 14 days before updating to help circumvent supply chain attacks
+    cooldown:
+      default-days: 14
 
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
       interval: "weekly"
+    # Wait 14 days before updating to help circumvent supply chain attacks
+    cooldown:
+      default-days: 14
 
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "weekly"
+    # Wait 14 days before updating to help circumvent supply chain attacks
+    cooldown:
+      default-days: 14
