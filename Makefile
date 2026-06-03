@@ -10,11 +10,11 @@ OUT := $(shell pwd)/_out
 
 HELM_FILES := $(shell find deploy/myra-cert-manager-webhook)
 
-# FIXME: The environment variables are required by the test helper in cert-manager, but not required to run the tests.
 test: setup-envtest
-	TEST_ASSET_ETCD=$(LOCALBIN)/k8s/$(ENVTEST_K8S_VERSION)-$(OS)-$(ARCH)/etcd \
-	TEST_ASSET_KUBE_APISERVER=$(LOCALBIN)/k8s/$(ENVTEST_K8S_VERSION)-$(OS)-$(ARCH)/kube-apiserver \
-	TEST_ASSET_KUBECTL=$(LOCALBIN)/k8s/$(ENVTEST_K8S_VERSION)-$(OS)-$(ARCH)/kubectl \
+	$(eval ENVTEST_BIN_DIR := $(shell "$(ENVTEST)" use $(ENVTEST_K8S_VERSION) --bin-dir "$(LOCALBIN)" -p path))
+	TEST_ASSET_ETCD="$(ENVTEST_BIN_DIR)/etcd" \
+	TEST_ASSET_KUBE_APISERVER="$(ENVTEST_BIN_DIR)/kube-apiserver" \
+	TEST_ASSET_KUBECTL="$(ENVTEST_BIN_DIR)/kubectl" \
 	$(GO) test -v -coverprofile=coverage.out $(shell go list ./... | grep -v /mocks/)
 	$(GO) tool cover -func=coverage.out > coverage.txt
 
