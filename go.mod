@@ -124,7 +124,7 @@ require (
 
 require (
 	github.com/Myra-Security-GmbH/signature v1.1.0 // indirect
-	github.com/cert-manager/cert-manager v1.20.2
+	github.com/cert-manager/cert-manager v1.20.3
 	github.com/gorilla/mux v1.8.1
 	golang.org/x/time v0.15.0 // indirect
 )
