@@ -20,10 +20,15 @@ jobs:
         with:
           persist-credentials: false
 
+      # Go version follows the Dockerfile builder image, which Dependabot bumps
+      - name: Resolve Go version
+        id: go
+        run: printf 'version=%s\n' "$(sed -nE 's/^FROM .*golang:([0-9.]+)-alpine.*/\1/p' Dockerfile)" >> "$GITHUB_OUTPUT"
+
       - name: Set up Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version-file: go.mod
+          go-version: ${{ steps.go.outputs.version }}
           cache: false
 
       - name: Run Tests with Coverage
