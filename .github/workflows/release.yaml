@@ -19,10 +19,15 @@ jobs:
         with:
           persist-credentials: false
 
+      # Go version follows the Dockerfile builder image, which Dependabot bumps
+      - name: Resolve Go version
+        id: go
+        run: printf 'version=%s\n' "$(sed -nE 's/^FROM .*golang:([0-9.]+)-alpine.*/\1/p' Dockerfile)" >> "$GITHUB_OUTPUT"
+
       - name: Set up Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version-file: go.mod
+          go-version: ${{ steps.go.outputs.version }}
           cache: false
 
       - name: Run Tests with Coverage
@@ -113,10 +118,15 @@ jobs:
         with:
           persist-credentials: false
 
+      # Helm version follows .github/helm/Dockerfile, which Dependabot bumps
+      - name: Resolve Helm version
+        id: helm
+        run: printf 'version=v%s\n' "$(sed -nE 's/^FROM alpine\/helm:([0-9.]+).*/\1/p' .github/helm/Dockerfile)" >> "$GITHUB_OUTPUT"
+
       - uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
         name: "Setup Helm"
         with:
-          version: "v3.17.0"
+          version: ${{ steps.helm.outputs.version }}
 
       - name: Update values.yaml with yq
         env:

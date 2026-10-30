@@ -17,9 +17,15 @@ updates:
       default-days: 14
 
   - package-ecosystem: "docker"
-    directory: "/"
+    directories:
+      - "/"
+      - "/.github/helm"
     schedule:
       interval: "weekly"
     # Wait 14 days before updating to help circumvent supply chain attacks
     cooldown:
       default-days: 14
+    ignore:
+      # Stay on Helm 3
+      - dependency-name: "alpine/helm"
+        update-types: ["version-update:semver-major"]
