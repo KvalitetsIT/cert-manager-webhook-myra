@@ -1,0 +1,33 @@
+name: Dependabot auto-merge
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  auto-merge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      # Patch/minor only; k8s.io, cert-manager and myrasec-go are always merged by hand
+      - name: Enable auto-merge
+        if: >-
+          (steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+           steps.metadata.outputs.update-type == 'version-update:semver-minor') &&
+          !contains(steps.metadata.outputs.dependency-names, 'k8s.io/') &&
+          !contains(steps.metadata.outputs.dependency-names, 'github.com/cert-manager/') &&
+          !contains(steps.metadata.outputs.dependency-names, 'github.com/Myra-Security-GmbH/')
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge --auto --squash "$PR_URL"
