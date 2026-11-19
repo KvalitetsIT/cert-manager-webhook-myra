@@ -3,7 +3,7 @@ module github.com/KvalitetsIT/myra-cert-manager-webhook
 go 1.26.4
 
 require (
-	github.com/Myra-Security-GmbH/myrasec-go/v2 v2.62.1
+	github.com/Myra-Security-GmbH/myrasec-go/v2 v2.63.0
 	github.com/caarlos0/env/v11 v11.4.1
 	github.com/joho/godotenv v1.5.1
 	github.com/miekg/dns v1.1.73
@@ -123,5 +123,5 @@ require (
 	github.com/Myra-Security-GmbH/signature v1.1.0 // indirect
 	github.com/cert-manager/cert-manager v1.21.2
 	github.com/gorilla/mux v1.8.1
-	golang.org/x/time v0.15.0 // indirect
+	golang.org/x/time v0.16.0 // indirect
 )
